@@ -8,8 +8,27 @@ namespace sunset.Controllers;
 [Route("[controller]")]
 public class RevenuesController : ControllerBase
 {
-  private List<Revenue> revenues = new();
-  private int NextId {get; set;} = 1;
+  private static List<Revenue> revenues = new();
+  private static int NextId {get; set;} = 1;
+
+  [HttpGet]
+  public ActionResult GetAll()
+  {
+    return Ok(revenues);
+  }
+
+  [HttpGet("{id}")]
+  public ActionResult GetById(int id)
+  {
+    var revenue = revenues.Find(r => r.Id == id);
+
+    if (revenue is null)
+      return NotFound(new {
+        message = "Revenue not found!"
+      });
+
+    return Ok(revenue);
+  }
 
   [HttpPost]
   public ActionResult CreateRevenue(RevenueRequest request)
