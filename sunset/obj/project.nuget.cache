@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "o5LpQ6/m1o4JGDperzBpIIyQdGQJqhQjNsM/DBLxqzn8iyFgtsS95AG1JZtOOUV0di1vaQRKOsd6o/ovUj+j0w==",
+  "success": true,
+  "projectFilePath": "/home/alexsandro/documentos/projetos/sunsetApi/sunset/sunset.csproj",
+  "expectedPackageFiles": [
+    "/home/alexsandro/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/home/alexsandro/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/home/alexsandro/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "/home/alexsandro/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "/home/alexsandro/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "/home/alexsandro/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.5.0/swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
