@@ -31,18 +31,53 @@ public class RevenuesController : ControllerBase
   }
 
   [HttpPost]
-  public ActionResult CreateRevenue(RevenueRequest request)
+  public ActionResult Create(RevenueRequest request)
   {
     Revenue revenue = new
     (
-      NextId,
+      NextId++,
       request
     );
-
-    NextId++;
 
     revenues.Add(revenue);
 
     return StatusCode(201, revenue);
+  }
+
+  [HttpPut("{id}")]
+  public ActionResult Update(int id, RevenueRequest request)
+  {
+    var revenue = revenues.Find(r => r.Id == id);
+
+    if (revenue is null)
+      return NotFound(new {
+        message = "Revenue not found!"
+      });
+    
+    Revenue updatedRevenue = new
+    (
+      id,
+      request
+    );
+
+    revenues.Remove(revenue);
+    revenues.Add(updatedRevenue);
+
+    return Ok(updatedRevenue);
+  }
+
+  [HttpDelete("{id}")]
+  public ActionResult Delete(int id)
+  {
+    var revenue = revenues.Find(r => r.Id == id);
+
+    if (revenue is null)
+      return NotFound(new {
+        message = "Revenue not found!"
+      });
+    
+    revenues.Remove(revenue);
+
+    return NoContent();
   }
 }
