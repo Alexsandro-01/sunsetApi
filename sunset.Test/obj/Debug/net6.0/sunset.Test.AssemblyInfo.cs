@@ -10,14 +10,13 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("sunset")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("sunset.Test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("sunset")]
-[assembly: System.Reflection.AssemblyTitleAttribute("sunset")]
+[assembly: System.Reflection.AssemblyProductAttribute("sunset.Test")]
+[assembly: System.Reflection.AssemblyTitleAttribute("sunset.Test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("sunset.Test")]
 
 // Gerado pela classe WriteCodeFragment do MSBuild.
 
