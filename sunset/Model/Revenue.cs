@@ -1,7 +1,7 @@
 using sunset.Requests;
 
-namespace sunset.Core;
-class Revenue
+namespace sunset.Model;
+public class Revenue
 {
 
   public int Id {get; set;}
