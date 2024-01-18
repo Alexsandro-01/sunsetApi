@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using sunset.Core;
+using sunset.Service;
 using sunset.Requests;
+using sunset.Model;
 
 namespace sunset.Controllers;
 
@@ -8,76 +9,95 @@ namespace sunset.Controllers;
 [Route("[controller]")]
 public class RevenuesController : ControllerBase
 {
-  private static List<Revenue> revenues = new();
-  private static int NextId {get; set;} = 1;
+
+  protected IRevenueService _service;
+  public RevenuesController(IRevenueService service)
+  {
+    _service = service;
+  }
 
   [HttpGet]
   public ActionResult GetAll()
   {
-    return Ok(revenues);
+    try
+    {
+      List<Revenue> revenue = _service.GetRevenueList();
+      return Ok(revenue);
+    }
+    catch (System.Exception ex)
+    {
+      return BadRequest(new{
+        message = ex.Message
+      });
+    }
   }
 
   [HttpGet("{id}")]
   public ActionResult GetById(int id)
   {
-    var revenue = revenues.Find(r => r.Id == id);
-
-    if (revenue is null)
-      return NotFound(new {
-        message = "Revenue not found!"
+    try
+    {
+      Revenue revenue = _service.GetRevenue(id);
+      
+      return Ok(revenue);
+    }
+    catch (System.Exception ex)
+    {
+      return NotFound(new{
+        message = ex.Message
       });
-
-    return Ok(revenue);
+    }
   }
 
   [HttpPost]
   public ActionResult Create(RevenueRequest request)
   {
-    Revenue revenue = new
-    (
-      NextId++,
-      request
-    );
+    try
+    {
+      Revenue revenue = _service.CreateRevenue(request);
 
-    revenues.Add(revenue);
-
-    return StatusCode(201, revenue);
+      return StatusCode(201, revenue);
+    }
+    catch (System.Exception ex)
+    { 
+      return BadRequest(new{
+        message = ex.Message
+      });
+    }
   }
 
   [HttpPut("{id}")]
   public ActionResult Update(int id, RevenueRequest request)
   {
-    var revenue = revenues.Find(r => r.Id == id);
+    try
+    {
+      Revenue revenue = _service.UpdateRevenue(id, request);
 
-    if (revenue is null)
-      return NotFound(new {
-        message = "Revenue not found!"
+      return Ok(revenue);
+    }
+    catch (System.Exception ex)
+    {
+      return NotFound(new{
+        message = ex.Message
       });
-    
-    Revenue updatedRevenue = new
-    (
-      id,
-      request
-    );
-
-    revenues.Remove(revenue);
-    revenues.Add(updatedRevenue);
-
-    return Ok(updatedRevenue);
+      
+    }
   }
 
   [HttpDelete("{id}")]
   public ActionResult Delete(int id)
   {
-    var revenue = revenues.Find(r => r.Id == id);
+    try
+    {
+      _service.DeleteRevenue(id);
 
-    if (revenue is null)
-      return NotFound(new {
-        message = "Revenue not found!"
+      return NoContent();
+    }
+    catch (System.Exception ex)
+    {
+      return NotFound(new{
+        message = ex.Message
       });
-    
-    revenues.Remove(revenue);
-
-    return NoContent();
+    }
   }
 }

@@ -1,4 +1,4 @@
-using sunset.Core;
+using sunset.Model;
 
 namespace sunset.Requests;
 
