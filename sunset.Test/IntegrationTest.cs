@@ -41,7 +41,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     }).CreateClient();
   }
 
-  [Theory(DisplayName = "Testing route /GET Revenues")]
+  [Theory(DisplayName = "Testing route /GET revenues")]
   [InlineData("/revenues")]
   public async Task TestGetRevenue(string url)
   {
@@ -71,14 +71,37 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     Revenue[] jsonResponse = JsonConvert.DeserializeObject<Revenue[]>(responseString)!;
 
     // Assert
-    Assert.Equal(revenuesMoq[1].Id, jsonResponse[1].Id);
-    Assert.Equal(revenuesMoq[1].Date, jsonResponse[1].Date);
-    Assert.Equal(revenuesMoq[1].Culture, jsonResponse[1].Culture);
-    Assert.Equal(revenuesMoq[1].UnityValue, jsonResponse[1].UnityValue);
-    Assert.Equal(revenuesMoq[1].Unity, jsonResponse[1].Unity);
-    Assert.Equal(revenuesMoq[1].TotalValue, jsonResponse[1].TotalValue);
-
     Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+    AssertResponseContent(revenuesMoq[0], jsonResponse[0]);
+    AssertResponseContent(revenuesMoq[1], jsonResponse[1]);
+  }
+
+  [Theory(DisplayName = "Testing route /POST revenues")]
+  [InlineData("/revenues")]
+  public async Task TestCreateRevenue(string url)
+  {
+    // Arrange
+    RevenueRequest requestEx = RequestExemple("abóbora", "tela");
+    Revenue revenueMoq = new(3, requestEx);
+    mockService.Setup(s => s.CreateRevenue(It.IsAny<RevenueRequest>())).Returns(revenueMoq);
+
+    // Act
+    var response = await _webClientTest.PostAsync
+    (
+      url,
+      new StringContent
+      (
+        JsonConvert.SerializeObject(requestEx),
+        System.Text.Encoding.UTF8,
+        "application/json"
+      )
+    );
+    var responseString = await response.Content.ReadAsStringAsync();
+    Revenue jsonResponse = JsonConvert.DeserializeObject<Revenue>(responseString)!;
+
+    // Assert
+    Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
+    AssertResponseContent(revenueMoq, jsonResponse);
   }
 
   protected static RevenueRequest RequestExemple(string culture, string unity)
@@ -94,6 +117,16 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     };
 
     return request;
+  }
+
+  protected static void AssertResponseContent(Revenue revenueMoq, Revenue response)
+  {
+    Assert.Equal(revenueMoq.Id, response.Id);
+    Assert.Equal(revenueMoq.Date, response.Date);
+    Assert.Equal(revenueMoq.Culture, response.Culture);
+    Assert.Equal(revenueMoq.Unity, response.Unity);
+    Assert.Equal(revenueMoq.UnityValue, response.UnityValue);
+    Assert.Equal(revenueMoq.TotalValue, response.TotalValue);
   }
   
 }
