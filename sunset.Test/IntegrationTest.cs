@@ -185,6 +185,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     Assert.Equal(revenueMoq.Culture, response.Culture);
     Assert.Equal(revenueMoq.Unity, response.Unity);
     Assert.Equal(revenueMoq.UnityValue, response.UnityValue);
+    Assert.Equal(revenueMoq.Quantity, response.Quantity);
     Assert.Equal(revenueMoq.TotalValue, response.TotalValue);
   }
   
