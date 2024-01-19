@@ -76,6 +76,24 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     AssertResponseContent(revenuesMoq[1], jsonResponse[1]);
   }
 
+  [Theory(DisplayName = "Testing route /GetById revenues")]
+  [InlineData("/revenues")]
+  public async Task TestGetById(string url)
+  {
+    // Arrange
+    Revenue revenueMoq = new(3, RequestExemple("maracujá", "tela"));
+    mockService.Setup(s => s.GetRevenue(3)).Returns(revenueMoq);
+
+    // Act
+    var response = await _webClientTest.GetAsync(url+"/3");
+    var responseString = await response.Content.ReadAsStringAsync();
+    Revenue jsonResponse = JsonConvert.DeserializeObject<Revenue>(responseString)!;
+
+    // Assert
+    Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+    AssertResponseContent(revenueMoq, jsonResponse);
+  }
+
   [Theory(DisplayName = "Testing route /POST revenues")]
   [InlineData("/revenues")]
   public async Task TestCreateRevenue(string url)
@@ -102,6 +120,47 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     // Assert
     Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
     AssertResponseContent(revenueMoq, jsonResponse);
+  }
+
+  [Theory(DisplayName = "Testing route /PUT revenues")]
+  [InlineData("/revenues")]
+  public async Task TestPutRevenue(string url)
+  {
+    // Arrange
+    RevenueRequest requestEx = RequestExemple("mamão", "cx");
+    Revenue revenueMoq = new(4, requestEx);
+    mockService.Setup(s => s.UpdateRevenue(4, It.IsAny<RevenueRequest>())).Returns(revenueMoq);
+
+    // Act
+    var response = await _webClientTest.PutAsync
+    (
+      url+"/4",
+      new StringContent
+      (
+        JsonConvert.SerializeObject(requestEx),
+        System.Text.Encoding.UTF8,
+        "application/json"
+      )
+    );
+    var responseString = await response.Content.ReadAsStringAsync();
+    Revenue jsonResponse = JsonConvert.DeserializeObject<Revenue>(responseString)!;
+
+    Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+    AssertResponseContent(revenueMoq, jsonResponse);
+  }
+
+  [Theory(DisplayName = "Testing route /DELETE revenues")]
+  [InlineData("/revenues")]
+  public async Task TesteDeleteRevenue(string url)
+  {
+    // Arrange
+    mockService.Setup(s => s.DeleteRevenue(4)).Equals(true);
+
+    // Act
+    var response = await _webClientTest.DeleteAsync(url+"/4");
+
+    //Assert
+    Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
   }
 
   protected static RevenueRequest RequestExemple(string culture, string unity)
